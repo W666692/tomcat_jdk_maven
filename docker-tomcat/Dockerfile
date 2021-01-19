@@ -55,21 +55,33 @@ EXPOSE 80
 #CMD 运行以下命令
 CMD ["nginx"]
 
-# 添加JDK、TOMCAT、maven
-ADD jdk-8u45-linux-x64.tar.gz /usr/local/
-ADD apache-tomcat-8.5.59.tar.gz /usr/local/
-ADD apache-maven-3.5.0-bin.tar.gz /usr/local/
+RUN yum install curl -y
 
-# 添加环境变量
-ENV JAVA_HOME /usr/local/jdk1.8.0_45
+# Install JDK 8  
+RUN cd /tmp &&  curl -L 'https://download.oracle.com/otn/java/jdk/8u271-b09/61ae65e088624f5aaa0b1d2d801acb16/jdk-8u271-linux-x64.tar.gz' -H 'Cookie: oraclelicense=accept-securebackup-cookie; gpw_e24=Dockerfile' | tar -xz  
+RUN mv /tmp/jdk1.8.0_271/ /usr/local/java-8-oracle/
+  
+# Set Oracle JDK 8 as default Java  
+RUN update-alternatives --install /usr/bin/java java /usr/local/java-8-oracle/bin/java 300     
+RUN update-alternatives --install /usr/bin/javac javac /usr/local/java-8-oracle/bin/javac 300     
+  
+ENV JAVA_HOME /usr/local/java-8-oracle/ 
 ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
-ENV CATALINA_HOME /usr/local/apache-tomcat-8.5.59
+  
+# Install tomcat8  
+RUN cd /tmp && curl -L 'http://archive.apache.org/dist/tomcat/tomcat-8/v8.5.59/bin/apache-tomcat-8.5.59.tar.gz' | tar -xz
+RUN mv /tmp/apache-tomcat-8.5.59/ /usr/local/tomcat8/
+
+ENV CATALINA_HOME /usr/local/tomcat8
+ENV PATH $PATH:$CATALINA_HOME/bin
+
+# Expose ports
+EXPOSE 8080  
+
+# Start tomcat
+CMD ["/usr/local/tomcat8/bin/catalina.sh", "run"]
+
+# Install maven
+
 ENV MAVEN_HOME /usr/local/apache-maven-3.5.0
 ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin:$MAVEN_HOME/bin
-
-# 暴露tomcat端口
-EXPOSE 8080
-
-# 启动web app
-CMD ["/usr/local/apache-tomcat-8.5.59/bin/catalina.sh", "run"]
-
