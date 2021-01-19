@@ -82,6 +82,8 @@ EXPOSE 8080
 CMD ["/usr/local/tomcat8/bin/catalina.sh", "run"]
 
 # Install maven
+RUN cd /tmp && curl -L 'https://apache.claz.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz' | tar -xz
+RUN mv /tmp/apache-maven-3.6.3/ /usr/local/apache-maven-3.6.3/
 
-ENV MAVEN_HOME /usr/local/apache-maven-3.5.0
+ENV MAVEN_HOME /usr/local/apache-maven-3.6.3
 ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin:$MAVEN_HOME/bin
