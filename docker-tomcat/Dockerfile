@@ -77,9 +77,9 @@ ENV PATH $PATH:$CATALINA_HOME/bin
 
 # Expose ports
 EXPOSE 8080  
-
+CMD sed -i '499,509 s/"&"/ /' /usr/local/tomcat8/bin/catalina.sh
 # Start tomcat
-CMD ["/usr/local/tomcat8/bin/start.sh", "run"]
+CMD ["/usr/local/tomcat8/bin/catalina.sh", "run"]
 
 # Install maven
 RUN cd /tmp && curl -L 'https://apache.claz.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz' | tar -xz
