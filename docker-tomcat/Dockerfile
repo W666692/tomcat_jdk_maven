@@ -51,11 +51,7 @@ RUN ln -s /usr/local/nginx/sbin/* /usr/local/sbin/
  
 #EXPOSE 映射端口
 EXPOSE 80
- 
-#CMD 运行以下命令
-CMD ["nginx", "run"]
-
-RUN yum install curl -y
+RUN yum install curl vim -y
 
 # Install JDK 8  
 RUN cd /tmp &&  curl -L 'https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.tar.gz' | tar -xz
@@ -71,15 +67,11 @@ ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 # Install tomcat8  
 RUN cd /tmp && curl -L 'http://archive.apache.org/dist/tomcat/tomcat-8/v8.5.59/bin/apache-tomcat-8.5.59.tar.gz' | tar -xz
 RUN mv /tmp/apache-tomcat-8.5.59/ /usr/local/tomcat8/
-
 ENV CATALINA_HOME /usr/local/tomcat8
-ENV PATH $PATH:$CATALINA_HOME/bin
+ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin
 
 # Expose ports
 EXPOSE 8080  
-CMD sed -i '499,509 s/"&"/ /' /usr/local/tomcat8/bin/catalina.sh
-# Start tomcat
-CMD ["/usr/local/tomcat8/bin/catalina.sh", "run"]
 
 # Install maven
 RUN cd /tmp && curl -L 'https://apache.claz.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz' | tar -xz
@@ -87,3 +79,9 @@ RUN mv /tmp/apache-maven-3.6.3/ /usr/local/apache-maven-3.6.3/
 
 ENV MAVEN_HOME /usr/local/apache-maven-3.6.3
 ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin:$MAVEN_HOME/bin
+RUN sed -i '499,509 s/"&"/ /' /usr/local/tomcat8/bin/catalina.sh
+
+#CMD 运行以下命令
+# Start tomcat
+CMD ["/usr/local/tomcat8/bin/catalina.sh","run"]
+CMD ["nginx","run"]
