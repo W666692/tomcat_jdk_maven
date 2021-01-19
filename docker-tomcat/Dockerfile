@@ -71,5 +71,5 @@ ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin:$MAVEN_HOME/
 EXPOSE 8080
 
 # 启动web app
-CMD /usr/local/apache-tomcat-8.5.59/bin/catalina.sh run
+CMD ["/usr/local/apache-tomcat-8.5.59/bin/catalina.sh", "run"]
 
