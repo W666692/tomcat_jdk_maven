@@ -3,7 +3,7 @@ FROM centos:latest
 
 # 维护者信息
 MAINTAINER lidangqi "llf860105@gmail.com"
-
+      
 # 镜像的指令操作
 
 # 安装EPEL仓库
@@ -58,8 +58,8 @@ CMD ["nginx"]
 RUN yum install curl -y
 
 # Install JDK 8  
-RUN cd /tmp &&  curl -L 'https://download.oracle.com/otn/java/jdk/8u271-b09/61ae65e088624f5aaa0b1d2d801acb16/jdk-8u271-linux-x64.tar.gz' -H 'Cookie: oraclelicense=accept-securebackup-cookie; gpw_e24=Dockerfile' | tar -xz  
-RUN mv /tmp/jdk1.8.0_271/ /usr/local/java-8-oracle/
+RUN cd /tmp &&  curl -L 'https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.tar.gz' | tar -xz
+RUN mv /tmp/jdk1.8.0_202/ /usr/local/java-8-oracle/
   
 # Set Oracle JDK 8 as default Java  
 RUN update-alternatives --install /usr/bin/java java /usr/local/java-8-oracle/bin/java 300     
