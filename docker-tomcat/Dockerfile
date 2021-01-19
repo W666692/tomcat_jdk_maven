@@ -83,5 +83,5 @@ RUN sed -i '499,509 s/"&"/ /' /usr/local/tomcat8/bin/catalina.sh
 
 #CMD 运行以下命令
 # Start tomcat
-CMD ["/usr/local/tomcat8/bin/catalina.sh","run"]
+ENTRYPOINT ["/usr/local/tomcat8/bin/catalina.sh","run"]
 CMD ["nginx","run"]
