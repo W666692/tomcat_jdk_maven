@@ -53,7 +53,7 @@ RUN ln -s /usr/local/nginx/sbin/* /usr/local/sbin/
 EXPOSE 80
  
 #CMD 运行以下命令
-CMD ["nginx"]
+CMD ["nginx", "run"]
 
 RUN yum install curl -y
 
@@ -79,7 +79,7 @@ ENV PATH $PATH:$CATALINA_HOME/bin
 EXPOSE 8080  
 
 # Start tomcat
-CMD ["/usr/local/tomcat8/bin/catalina.sh", "run"]
+CMD ["/usr/local/tomcat8/bin/start.sh", "run"]
 
 # Install maven
 RUN cd /tmp && curl -L 'https://apache.claz.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz' | tar -xz
