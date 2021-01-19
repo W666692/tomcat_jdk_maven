@@ -37,6 +37,24 @@ RUN /bin/sed -i 's/.*session.*required.*pam_loginuid.so.*/session optional pam_l
 
 EXPOSE 22
 
+# 安装nginx
+#ADD  获取url中的文件,放在当前目录下
+ADD http://nginx.org/download/nginx-1.18.0.tar.gz .
+ 
+#RUN 执行以下命令 
+RUN yum install -y pcre-devel wget net-tools gcc zlib zlib-devel make openssl-devel
+RUN useradd -M -s /sbin/nologin nginx
+RUN tar -zxvf nginx-1.18.0.tar.gz
+RUN mkdir -p /usr/local/nginx
+RUN cd nginx-1.18.0 && ./configure --prefix=/usr/local/nginx --user=nginx --group=nginx --with-http_stub_status_module && make && make install
+RUN ln -s /usr/local/nginx/sbin/* /usr/local/sbin/
+ 
+#EXPOSE 映射端口
+EXPOSE 80
+ 
+#CMD 运行以下命令
+CMD ["nginx"]
+
 # 添加JDK、TOMCAT、maven
 ADD jdk-8u45-linux-x64.tar.gz /usr/local/
 ADD apache-tomcat-8.5.59.tar.gz /usr/local/
