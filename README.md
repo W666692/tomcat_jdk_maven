@@ -1,7 +1,4 @@
-# tomcat_jdk_maven
-centos8
-tomcat
-jdk
-maven
-nginx
-ssh
+# Dockerfile-nginx-jdk-tomcat
+
+A Dockerfile that installs the latest nginx1.8, jdk8, tomcat8.
+
