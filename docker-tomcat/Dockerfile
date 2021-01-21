@@ -30,28 +30,21 @@ RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key \
     && ssh-keygen -t rsa -f /etc/ssh/ssh_host_ed25519_key
 
 #修改配置信息
-RUN /bin/sed -i 's/.*session.*required.*pam_loginuid.so.*/session optional pam_loginuid.so/g' /etc/pam.d/sshd \
-    && /bin/sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config \
-    && /bin/sed -i "s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config
-
-
-EXPOSE 22
+RUN sed -i 's/.*session.*required.*pam_loginuid.so.*/session optional pam_loginuid.so/g' /etc/pam.d/sshd \
+    && sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config \
+    && sed -i "s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config
 
 # 安装nginx
 #ADD  获取url中的文件,放在当前目录下
 ADD http://nginx.org/download/nginx-1.18.0.tar.gz .
  
 #RUN 执行以下命令 
-RUN yum install -y pcre-devel wget net-tools gcc zlib zlib-devel make openssl-devel
+RUN yum install -y pcre-devel wget net-tools gcc zlib zlib-devel make openssl-devel vim
 RUN useradd -M -s /sbin/nologin nginx
 RUN tar -zxvf nginx-1.18.0.tar.gz
 RUN mkdir -p /usr/local/nginx
 RUN cd nginx-1.18.0 && ./configure --prefix=/usr/local/nginx --user=nginx --group=nginx --with-http_stub_status_module && make && make install
 RUN ln -s /usr/local/nginx/sbin/* /usr/local/sbin/
- 
-#EXPOSE 映射端口
-EXPOSE 80
-RUN yum install curl vim -y
 
 # Install JDK 8  
 RUN cd /tmp &&  curl -L 'https://repo.huaweicloud.com/java/jdk/8u202-b08/jdk-8u202-linux-x64.tar.gz' | tar -xz
@@ -70,9 +63,6 @@ RUN mv /tmp/apache-tomcat-8.5.59/ /usr/local/tomcat8/
 ENV CATALINA_HOME /usr/local/tomcat8
 ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin
 
-# Expose ports
-EXPOSE 8080  
-
 # Install maven
 RUN cd /tmp && curl -L 'https://apache.claz.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz' | tar -xz
 RUN mv /tmp/apache-maven-3.6.3/ /usr/local/apache-maven-3.6.3/
@@ -81,7 +71,9 @@ ENV MAVEN_HOME /usr/local/apache-maven-3.6.3
 ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin:$MAVEN_HOME/bin
 RUN sed -i '499,509 s/"&"/ /' /usr/local/tomcat8/bin/catalina.sh
 
-#CMD 运行以下命令
-# Start tomcat
+# Expose ports
+EXPOSE 8080 80 22
+
+# Start tomcat nginx
 CMD nginx -g "daemon off;"
 ENTRYPOINT ["/usr/local/tomcat8/bin/catalina.sh","run"]
