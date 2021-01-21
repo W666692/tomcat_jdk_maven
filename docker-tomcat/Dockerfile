@@ -76,4 +76,4 @@ EXPOSE 8080 80 22
 ADD start.sh /start.sh
 RUN chmod 755 /start.sh
 
-ENTRYPOINT [ "/start.sh"]
+ENTRYPOINT ["/start.sh"]
