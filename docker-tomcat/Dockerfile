@@ -73,7 +73,7 @@ RUN sed -i '499,509 s/"&"/ /' /usr/local/tomcat8/bin/catalina.sh
 
 # Expose ports
 EXPOSE 8080 80 22
+ADD start.sh /start.sh
+RUN chmod 755 /start.sh
 
-# Start tomcat nginx
-CMD nginx -g "daemon off;"
-ENTRYPOINT ["/usr/local/tomcat8/bin/catalina.sh","run"]
+ENTRYPOINT [ "/start.sh"]
