@@ -33,7 +33,7 @@ RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key \
 RUN sed -i 's/.*session.*required.*pam_loginuid.so.*/session optional pam_loginuid.so/g' /etc/pam.d/sshd \
     && sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config \
     && sed -i "s/#UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config
-
+    
 # 安装nginx
 #ADD  获取url中的文件,放在当前目录下
 ADD http://nginx.org/download/nginx-1.18.0.tar.gz .
@@ -73,7 +73,7 @@ RUN sed -i '499,509 s/"&"/ /' /usr/local/tomcat8/bin/catalina.sh
 
 # Expose ports
 EXPOSE 8080 80 22
-VOLUME [ "/usr/local" ]
+
 ADD start.sh /start.sh
 RUN chmod 755 /start.sh
 
